@@ -4,7 +4,9 @@
 
 set -eux -o pipefail
 
-export ES_SERVER="${ES_SCHEME}://${ES_SEEDS%%,*}:${ES_PORT}"
+if [[ ${ENABLE_ES} == true ]]; then
+    export ES_SERVER="${ES_SCHEME}://${ES_SEEDS%%,*}:${ES_PORT}"
+fi
 
 DEFAULT_NAMESPACE="default"
 DEFAULT_NAMESPACE_RETENTION="1"

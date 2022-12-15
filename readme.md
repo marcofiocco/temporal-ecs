@@ -14,23 +14,13 @@ A temporal deployment tool which lets you setup , deploy and get your temporal s
 - Run the script `./setup-temporal.sh serverName uiName envName`
 - When prompted by copilot init
   `Would you like to deploy a test environment?`
-    - Enter `N` (We will create our on env for deployment)
+    - Enter `N` (We will create our own env for deployment)
 - Have a :popcorn: and watch the things being deployed :rocket:
 
 ## All about the script :magic_wand:
 
 `./setup-temporal.sh` will take in three arguments and all are mandatory.
-`serverName uiName envName` are the arguments that are required.
-
-- **Server Name** - Specify the name that you want the temporal app and service to be called with. Don't worry about the naming conventions , we will add suffix to the names correctly.
-
-  `serverName-app` will be the app name.
-
-  `serverName-svc` will be the service name.
-
-- **UI Name** -  Specify the name that you want the temporal ui server to be called with. Again , we will take care of the naming conventions :wink:
-
-  `uiName-svc` will be the service name
+`envName` are the arguments that are required.
 
 - **Env Name** - Specify the name for the environment which you want all the services to be deployed. And for the suffix - **We Don't Do That Here**
 # Setting up your temporal workflow.
@@ -55,7 +45,7 @@ When the UI server is deployed you will get another link ,  this link will be us
 It also requires 3 arguments to run and they are same as the setup script.
 As AWS Copilot is being used under the hood , only if there are any changes; the script will deploy them or else it wont do any unnecessary deployment.
 
-`./update-temporal.sh serverName uiName envName`
+`./update-temporal.sh envName`
 
 To know more about the script or for detailed tutorial please visit the blogpost.
 

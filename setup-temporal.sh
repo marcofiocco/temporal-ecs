@@ -1,29 +1,25 @@
 #!/bin/bash
 
-[ -z "$1" ] && echo "No Server Name argument supplied" && exit 1
-[ -z "$2" ] && echo "No UI Name argument supplied" && exit 1
-[ -z "$3" ] && echo "No ENV Name argument supplied" && exit 1
+[ -z "$1" ] && echo "No ENV Name argument supplied" && exit 1
 
-echo "Server Name: $1-app"
+Env=$1
+AppName="temporal-app"
+SvcName="temporal-svc"
+UISvcName="temporal-web-svc"
 
-echo "UI Name: $2"
+echo "Server Name: $AppName"
+echo "UI Name: $UISvcName"
+echo "Env Name: $Env"
+echo "Service Name: $SvcName"
 
-echo "Env Name: $3"
-
-echo "Service Name: $1-svc"
-
-SvcName="$1-svc"
-AppName="$1-app"
-UISvcName="$2-svc"
-
-TemporalAddress="${SvcName}.${3}.${AppName}.local:7233"
+TemporalAddress="$SvcName.$Env.$AppName.local:7233"
 
 mkdir -p copilot/$SvcName/addons
 cp base/serverManifest.yml copilot/$SvcName/manifest.yml
 sed -i -r "s/someAppName/$SvcName/" copilot/$SvcName/manifest.yml
 rm copilot/$SvcName/manifest.yml-r
 cp base/database-cluster.yml copilot/$SvcName/addons/$SvcName-cluster.yml
-cp base/opensearch.yml copilot/$SvcName/addons/$SvcName-opensearch.yml
+#cp base/opensearch.yml copilot/$SvcName/addons/$SvcName-opensearch.yml
 
 mkdir -p copilot/$UISvcName
 cp base/uiManifest.yml copilot/$UISvcName/manifest.yml
@@ -31,16 +27,17 @@ sed -i -r "s/someUiName/$UISvcName/" copilot/$UISvcName/manifest.yml
 sed -i -r "s/someTemporalAddress/$TemporalAddress/" copilot/$UISvcName/manifest.yml
 rm copilot/$UISvcName/manifest.yml-r
 
-copilot init -a "$1-app" -t "Load Balanced Web Service" -n "$1-svc"
+copilot app init --permissions-boundary ADSK-Boundary --resource-tags adsk:moniker="RESGAD-C-UW2"
 
-copilot env init --name $3 --profile default --default-config
+copilot env init --name $Env
+copilot env deploy --name $Env # this creates the ECS cluster, security group and service discovery (Cloud Map)
 
-copilot env deploy --name $3
+copilot svc init -a "$AppName" -t "Load Balanced Web Service" -n "$SvcName" # this creates the load balancer, ECS service and addons
 
-copilot svc init -a "$1-app" -t "Load Balanced Web Service" -n "$2-svc"
+copilot svc init -a "$AppName" -t "Load Balanced Web Service" -n "$UISvcName" # this creates the load balancer, ECS service and addons
 
-echo "Deploying $1-svc"
-copilot deploy --name "$1-svc" -e "$3"
+echo "Deploying $SvcName"
+copilot svc deploy --name "$SvcName" -e "$Env" # this actually instantiates the resources
 
-echo "Deploying $2-svc"
-copilot deploy --name "$2-svc" -e "$3"
+echo "Deploying $UISvcName"
+copilot svc deploy --name "$UISvcName" -e "$Env" # this actually instantiates the resources
