@@ -11,7 +11,7 @@ A temporal deployment tool which lets you setup , deploy and get your temporal s
 - Make sure you are in the root directory of the project, this is where you will execute the next steps.
 - Run this command to give the execution permission to the script's.
   `chmod +x setup-temporal.sh update-temporal.sh`
-- Run the script `./setup-temporal.sh serverName uiName envName`
+- Run the script `./setup-temporal.sh envName permissionBoundary resourceTag`
 - When prompted by copilot init
   `Would you like to deploy a test environment?`
     - Enter `N` (We will create our own env for deployment)
@@ -20,9 +20,10 @@ A temporal deployment tool which lets you setup , deploy and get your temporal s
 ## All about the script :magic_wand:
 
 `./setup-temporal.sh` will take in three arguments and all are mandatory.
-`envName` are the arguments that are required.
 
-- **Env Name** - Specify the name for the environment which you want all the services to be deployed. And for the suffix - **We Don't Do That Here**
+- **Env Name** - Specify the name for the environment which you want all the services to be deployed.
+- **Permission Boundary** - Specify the policy to allow to create roles.
+- **Resource Tag** - Specify the special tag that you want to apply to resources created by copilot.
 # Setting up your temporal workflow.
 Considering that you have some idea about temporal , let's see how you can use the deployed Temporal servers within your existing workflow and workers.
 Incase you are new to temporal, you should consider going through [temporal first.](https://temporal.io/)
@@ -38,15 +39,12 @@ Also if you launch all the services in the same VPC (which is the case with the 
 
 You can read more about copilot service discovery [over here.](https://aws.github.io/copilot-cli/docs/developing/service-discovery/)
 
-When the UI server is deployed you will get another link ,  this link will be used to see the dashboard for your workflow details.
+When the UI server is deployed you will get another link, this link will be used to see the dashboard for your workflow details.
 
 # Update Script
 `./update-temporal.sh` is all you need whenever you want to deploy any changes to the current ECS Infrastructure.
-It also requires 3 arguments to run and they are same as the setup script.
-As AWS Copilot is being used under the hood , only if there are any changes; the script will deploy them or else it wont do any unnecessary deployment.
+As AWS Copilot is being used under the hood, use this only if there are any changes; the script will deploy them or else it won't do any unnecessary deployment.
 
 `./update-temporal.sh envName`
-
-To know more about the script or for detailed tutorial please visit the blogpost.
 
 PS- Remember the basic's **Be in the root folder to run this script as well** :smile:
