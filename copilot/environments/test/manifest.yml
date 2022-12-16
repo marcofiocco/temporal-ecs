@@ -11,20 +11,20 @@ network:
   vpc:
     id: vpc-01ee39a7e1b35b0f1
     subnets:
-      public:
+      public: # Pub 1/2/3
         - id: subnet-033c755152f7ce88d
         - id: subnet-0bcabcfbffcb23113
         - id: subnet-0065e1a301fcc31ce
-      private:
+      private: # App 1/2/3
         - id: subnet-0f66984772f521b50
         - id: subnet-032b43e10d03d055a
         - id: subnet-06b1e46141c5a88c7
 
-# Configure the load balancers in your environment, once created.
+# Configure the load balancers in your environment, once created. This is the only place to configure load balancer certificates
 # http:
 #   public:
 #   private:
 
 # Configure observability for your environment resources.
 observability:
-  container_insights: false
+  container_insights: true

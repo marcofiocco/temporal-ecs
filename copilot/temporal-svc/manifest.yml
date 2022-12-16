@@ -3,13 +3,19 @@
 
 # Your service name will be used in naming your resources like log groups, ECS services, etc.
 name: temporal-svc #Do not edit this name , as it will be auto-replaced by the script.
-type: Load Balanced Web Service
+type: Load Balanced Web Service # An ECS Service running tasks on Fargate with an Application Load Balancer, a Network Load Balancer or both, as ingress. This option is suitable for HTTP or TCP services with steady request volumes that need to access resources in a VPC or require advanced configuration
+#type: Request-Driven Web Service # An AWS App Runner service (only for HTTP?) that autoscales your instances based on incoming traffic and scales down to a baseline instance when there's no traffic
 
 # Distribute traffic to your service.
 http:
   false
 nlb:
   port: 7233
+
+# According to https://wiki.autodesk.com/pages/viewpage.action?pageId=729820597, ECS services cannot be public subnets
+network:
+  vpc:
+    placement: private
 
 # Configuration for your containers and service.
 image:
